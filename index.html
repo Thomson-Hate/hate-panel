@@ -192,6 +192,18 @@
       height: 18px;
     }
 
+    /* 🔹 Анимация переключения профиля */
+    .profile.showing {
+      opacity: 1 !important;
+      transform: scale(1) !important;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .profile.hiding {
+      opacity: 0 !important;
+      transform: scale(0.9) !important;
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
     audio { display: none; }
   </style>
 </head>
@@ -339,7 +351,20 @@
       return "offline";
     }
 
+    let isAnimating = false;
+    let currentDetective = null;
+
     async function selectDetective(det) {
+      if (isAnimating || currentDetective === det.name) return;
+      isAnimating = true;
+      currentDetective = det.name;
+
+      // скрываем старый профиль
+      if (!profile.classList.contains("hide")) {
+        profile.classList.add("hiding");
+        await new Promise(res => setTimeout(res, 400));
+      }
+
       const discordStatus = await getDiscordStatus(det.discord);
       const statusText = discordStatus.charAt(0).toUpperCase() + discordStatus.slice(1);
 
@@ -357,7 +382,6 @@
         linksHTML += '</div>';
       }
 
-      profile.classList.remove("hide");
       profile.innerHTML = `
         <div class="close-profile" onclick="closeProfile()">✕</div>
         <img src="${det.icon}">
@@ -368,6 +392,9 @@
         </p>
         ${linksHTML}
       `;
+
+      profile.classList.remove("hide", "hiding");
+      profile.classList.add("showing");
 
       body.classList.add("active");
       body.style.background = `url('${det.banner}') center/cover no-repeat`;
@@ -380,14 +407,27 @@
         const indicator = document.querySelector(".status-indicator");
         if (indicator) indicator.className = `status-indicator ${newStatus}`;
       }, 15000);
+
+      setTimeout(() => { isAnimating = false; }, 600);
     }
 
     function closeProfile() {
-      profile.classList.add("hide");
-      body.classList.remove("active");
-      body.style.background = "black";
-      music.pause();
-      clearInterval(window.statusInterval);
+      if (isAnimating) return;
+      isAnimating = true;
+      currentDetective = null;
+
+      profile.classList.remove("showing");
+      profile.classList.add("hiding");
+
+      setTimeout(() => {
+        profile.classList.add("hide");
+        profile.classList.remove("hiding");
+        body.classList.remove("active");
+        body.style.background = "black";
+        music.pause();
+        clearInterval(window.statusInterval);
+        isAnimating = false;
+      }, 400);
     }
   </script>
 </body>
