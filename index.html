@@ -110,133 +110,43 @@
     }
 
     /* DOCUMENTS */
-    .doc-section {
-      margin-bottom: 15px;
-    }
-
-    .city-btn {
-      background: rgba(255,255,255,0.08);
-      padding: 10px;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: 0.3s ease;
-      margin-top: 10px;
-    }
-
-    .city-btn:hover {
-      background: rgba(255,255,255,0.2);
-      transform: scale(1.03);
-    }
-
-    .submenu {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.5s ease;
-    }
-
-    .submenu.active {
-      max-height: 200px;
-      margin-top: 8px;
-    }
-
-    .sub-btn {
-      background: rgba(255,255,255,0.12);
-      margin-top: 8px;
-      padding: 8px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: 0.3s ease;
-    }
-
-    .sub-btn:hover {
-      background: rgba(255,255,255,0.25);
-    }
-
-    .list {
-      max-height: 0;
-      overflow-y: auto;
-      transition: max-height 0.6s ease;
-      margin-top: 8px;
-    }
-
-    .list.active {
-      max-height: 150px;
-    }
-
-    .link {
-      display: block;
-      background: rgba(255,255,255,0.08);
-      margin: 6px 0;
-      padding: 8px;
-      border-radius: 8px;
-      text-decoration: none;
-      color: white;
-      transition: 0.3s ease;
-    }
-
-    .link:hover {
-      background: rgba(255,255,255,0.2);
-      transform: scale(1.03);
-    }
+    .city-btn { background: rgba(255,255,255,0.08); padding: 10px; border-radius: 10px; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+    .city-btn:hover { background: rgba(255,255,255,0.2); transform: scale(1.03); }
+    .submenu { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; }
+    .submenu.active { max-height: 200px; margin-top: 8px; }
+    .sub-btn { background: rgba(255,255,255,0.12); margin-top: 8px; padding: 8px; border-radius: 8px; cursor: pointer; transition: 0.3s; font-size: 14px; }
+    .sub-btn:hover { background: rgba(255,255,255,0.25); }
+    .list { max-height: 0; overflow-y: auto; transition: max-height 0.6s ease; margin-top: 8px; }
+    .list.active { max-height: 150px; }
+    .link { display: block; background: rgba(255,255,255,0.08); margin: 6px 0; padding: 8px; border-radius: 8px; text-decoration: none; color: white; font-size: 12px; transition: 0.3s; }
+    .link:hover { background: rgba(255,255,255,0.2); transform: scale(1.03); }
 
     /* DETECTIVE */
-    .detective-container {
-      display: flex;
-      gap: 15px;
-    }
+    .detective-container { display: flex; gap: 15px; }
+    .sidebar { width: 70px; display: flex; flex-direction: column; align-items: center; overflow-y: auto; max-height: 300px; }
+    .det-avatar { width: 60px; height: 60px; border-radius: 50%; border: 2px solid white; margin-bottom: 10px; cursor: pointer; transition: 0.3s; }
+    .det-avatar:hover { transform: scale(1.1); box-shadow: 0 0 10px rgba(255,255,255,0.4); }
 
-    .sidebar {
-      width: 70px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      overflow-y: auto;
-      max-height: 300px;
-    }
+    .profile { flex: 1; background: rgba(0,0,0,0.3); border-radius: 12px; padding: 20px; text-align: center; position: relative; min-height: 200px; transition: 0.5s ease; }
+    .profile.hide { opacity: 0; transform: scale(0.9); }
 
-    .det-avatar {
-      width: 60px;
-      height: 60px;
+    .profile img { width: 100px; height: 100px; border-radius: 50%; border: 3px solid white; }
+
+    .status-indicator {
+      width: 14px;
+      height: 14px;
       border-radius: 50%;
-      border: 2px solid white;
-      margin-bottom: 10px;
-      cursor: pointer;
-      transition: 0.3s ease;
+      display: inline-block;
+      margin-left: 6px;
+      box-shadow: 0 0 10px rgba(255,255,255,0.5);
     }
 
-    .det-avatar:hover {
-      transform: scale(1.1);
-      box-shadow: 0 0 10px rgba(255,255,255,0.4);
-    }
+    .online { background: #43b581; }
+    .idle { background: #faa61a; }
+    .dnd { background: #f04747; }
+    .offline { background: #747f8d; }
 
-    .profile {
-      flex: 1;
-      background: rgba(0,0,0,0.3);
-      border-radius: 12px;
-      padding: 20px;
-      text-align: center;
-      position: relative;
-      min-height: 200px;
-      transition: 0.5s ease;
-    }
-
-    .profile.hide {
-      opacity: 0;
-      transform: scale(0.9);
-    }
-
-    .profile img {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      border: 3px solid white;
-    }
-
-    .profile h3 {
-      margin-top: 10px;
-      font-size: 22px;
-      letter-spacing: 1px;
-    }
+    .profile h3 { margin-top: 10px; font-size: 22px; letter-spacing: 1px; }
 
     .close-profile {
       position: absolute;
@@ -250,33 +160,25 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: 0.3s ease;
+      transition: 0.3s;
     }
-
-    .close-profile:hover {
-      background: rgba(255,255,255,0.3);
-      transform: scale(1.1);
-    }
+    .close-profile:hover { background: rgba(255,255,255,0.3); transform: scale(1.1); }
 
     audio { display: none; }
   </style>
 </head>
 <body>
-  <!-- 🌑 Интро -->
   <div class="intro" id="intro">
     <div style="font-size: 26px; font-weight: 600;">HATE PANEL</div>
     <div class="intro-text">Нажмите, чтобы войти</div>
   </div>
 
-  <!-- 🌌 Основной контейнер -->
   <div class="container" id="container">
-    <!-- DOCUMENTS -->
     <div class="card" id="documents">
       <h2>DOCUMENTS</h2>
       <div id="documents-content"></div>
     </div>
 
-    <!-- DETECTIVE -->
     <div class="card">
       <h2>DETECTIVE</h2>
       <div class="detective-container">
@@ -293,8 +195,8 @@
     const container = document.getElementById("container");
     const body = document.body;
     const music = document.getElementById("music");
+    const profile = document.getElementById("profile");
 
-    // === Данные документов ===
     const documents = {
       "San Diego": {
         Reports: [
@@ -316,25 +218,25 @@
       }
     };
 
-    // === Данные детективов ===
     const detectives = [
       {
         name: "[ CURATOR ] Thomson",
         icon: "assets/thomson_icon.png",
         banner: "assets/thomson_banner.gif",
         music: "assets/thomson_music.mp3",
-        status: "H A T E"
+        status: "H A T E",
+        discord: "1223426765045633255"
       },
       {
         name: "[ HEAD ] Chikago",
-        icon: "assets/Chikago_icon.png",
-        banner: "assets/Chikago_banner.gif",
-        music: "assets/Chikago_music.mp3",
-        status: "Chikago"
+        icon: "assets/chikago_icon.png",
+        banner: "assets/chikago_banner.gif",
+        music: "assets/chikago_music.mp3",
+        status: "Chikago",
+        discord: "820327530514743308"
       }
     ];
 
-    // === Интро ===
     intro.addEventListener("click", () => {
       intro.classList.add("hide");
       setTimeout(() => {
@@ -343,7 +245,7 @@
       }, 1800);
     });
 
-    // === Рендер документов ===
+    // Documents
     const docsContainer = document.getElementById("documents-content");
     Object.keys(documents).forEach(city => {
       const section = document.createElement("div");
@@ -374,22 +276,16 @@
         });
         submenu.appendChild(list);
 
-        subBtn.addEventListener("click", () => {
-          list.classList.toggle("active");
-        });
+        subBtn.addEventListener("click", () => list.classList.toggle("active"));
       });
 
-      cityBtn.addEventListener("click", () => {
-        submenu.classList.toggle("active");
-      });
-
+      cityBtn.addEventListener("click", () => submenu.classList.toggle("active"));
       section.appendChild(submenu);
       docsContainer.appendChild(section);
     });
 
-    // === Рендер детективов ===
+    // Detectives
     const detList = document.getElementById("detective-list");
-    const profile = document.getElementById("profile");
 
     detectives.forEach(det => {
       const img = document.createElement("img");
@@ -399,18 +295,41 @@
       detList.appendChild(img);
     });
 
-    function selectDetective(det) {
+    async function getDiscordStatus(id) {
+      try {
+        const res = await fetch(`https://api.lanyard.rest/v1/users/${id}`);
+        const data = await res.json();
+        if (data.success) return data.data.discord_status;
+      } catch { return "offline"; }
+      return "offline";
+    }
+
+    async function selectDetective(det) {
+      const discordStatus = await getDiscordStatus(det.discord);
+      const statusText = discordStatus.charAt(0).toUpperCase() + discordStatus.slice(1);
       profile.classList.remove("hide");
       profile.innerHTML = `
         <div class="close-profile" onclick="closeProfile()">✕</div>
         <img src="${det.icon}">
         <h3>${det.name}</h3>
-        <p>${det.status}</p>
+        <p>${det.status} 
+          <span class="status-indicator ${discordStatus}"></span>
+          <span style="font-size:12px;opacity:0.8;">${statusText}</span>
+        </p>
       `;
       body.classList.add("active");
       body.style.background = `url('${det.banner}') center/cover no-repeat`;
       music.src = det.music;
       music.play().catch(()=>{});
+
+      if (window.statusInterval) clearInterval(window.statusInterval);
+      window.statusInterval = setInterval(async () => {
+        const newStatus = await getDiscordStatus(det.discord);
+        const indicator = document.querySelector(".status-indicator");
+        if (indicator) {
+          indicator.className = `status-indicator ${newStatus}`;
+        }
+      }, 15000);
     }
 
     function closeProfile() {
@@ -418,6 +337,7 @@
       body.classList.remove("active");
       body.style.background = "black";
       music.pause();
+      clearInterval(window.statusInterval);
     }
   </script>
 </body>
