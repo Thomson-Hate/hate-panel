@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>@HATE PANEL</title>
+  <link rel="icon" href="assets/icon.png" type="image/png">
+  <style>
+    * {
+      margin: 0; padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+      user-select: none;
+    }
+
+    body {
+      height: 100vh;
+      background: black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      overflow: hidden;
+      position: relative;
+      transition: background 1.5s ease;
+    }
+
+    body.active {
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    body::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(8px);
+      z-index: 0;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+
+    body.active::before {
+      opacity: 1;
+    }
+
+    /* 🔹 Интро */
+    .intro {
+      position: fixed;
+      inset: 0;
+      background: black;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      z-index: 100;
+      gap: 10px;
+      transition: opacity 1.8s ease;
+    }
+    .intro.hide { opacity: 0; pointer-events: none; }
+
+    .intro-text { animation: blink 1.5s infinite; opacity: 0.8; }
+    @keyframes blink {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+
+    /* 🔹 Основная сетка */
+    .container {
+      display: flex;
+      gap: 50px;
+      z-index: 1;
+      position: relative;
+      opacity: 0;
+      transform: scale(0.95);
+      transition: opacity 1.2s ease, transform 1.2s ease;
+    }
+    .container.show {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* 🔹 Карточки */
+    .card {
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(8px);
+      border-radius: 16px;
+      padding: 30px;
+      width: 380px;
+      box-shadow: 0 0 25px rgba(0,0,0,0.6);
+      text-align: center;
+      transition: transform 0.5s ease, box-shadow 0.5s ease, background 0.5s ease;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+      background: rgba(0,0,0,0.7);
+      box-shadow: 0 0 40px rgba(255,255,255,0.15);
+    }
+
+    .card h2 {
+      margin-bottom: 20px;
+      font-size: 26px;
+      letter-spacing: 2px;
+      text-shadow: 0 0 10px rgba(255,255,255,0.5);
+    }
+
+    /* DOCUMENTS */
+    .doc-section {
+      margin-bottom: 15px;
+    }
+
+    .city-btn {
+      background: rgba(255,255,255,0.08);
+      padding: 10px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s ease;
+      margin-top: 10px;
+    }
+
+    .city-btn:hover {
+      background: rgba(255,255,255,0.2);
+      transform: scale(1.03);
+    }
+
+    .submenu {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease;
+    }
+
+    .submenu.active {
+      max-height: 200px;
+      margin-top: 8px;
+    }
+
+    .sub-btn {
+      background: rgba(255,255,255,0.12);
+      margin-top: 8px;
+      padding: 8px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .sub-btn:hover {
+      background: rgba(255,255,255,0.25);
+    }
+
+    .list {
+      max-height: 0;
+      overflow-y: auto;
+      transition: max-height 0.6s ease;
+      margin-top: 8px;
+    }
+
+    .list.active {
+      max-height: 150px;
+    }
+
+    .link {
+      display: block;
+      background: rgba(255,255,255,0.08);
+      margin: 6px 0;
+      padding: 8px;
+      border-radius: 8px;
+      text-decoration: none;
+      color: white;
+      transition: 0.3s ease;
+    }
+
+    .link:hover {
+      background: rgba(255,255,255,0.2);
+      transform: scale(1.03);
+    }
+
+    /* DETECTIVE */
+    .detective-container {
+      display: flex;
+      gap: 15px;
+    }
+
+    .sidebar {
+      width: 70px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-y: auto;
+      max-height: 300px;
+    }
+
+    .det-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 2px solid white;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .det-avatar:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 10px rgba(255,255,255,0.4);
+    }
+
+    .profile {
+      flex: 1;
+      background: rgba(0,0,0,0.3);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+      min-height: 200px;
+      transition: 0.5s ease;
+    }
+
+    .profile.hide {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+
+    .profile img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 3px solid white;
+    }
+
+    .profile h3 {
+      margin-top: 10px;
+      font-size: 22px;
+      letter-spacing: 1px;
+    }
+
+    .close-profile {
+      position: absolute;
+      top: 8px;
+      right: 10px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 50%;
+      width: 26px;
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: 0.3s ease;
+    }
+
+    .close-profile:hover {
+      background: rgba(255,255,255,0.3);
+      transform: scale(1.1);
+    }
+
+    audio { display: none; }
+  </style>
+</head>
+<body>
+  <!-- 🌑 Интро -->
+  <div class="intro" id="intro">
+    <div style="font-size: 26px; font-weight: 600;">HATE PANEL</div>
+    <div class="intro-text">Нажмите, чтобы войти</div>
+  </div>
+
+  <!-- 🌌 Основной контейнер -->
+  <div class="container" id="container">
+    <!-- DOCUMENTS -->
+    <div class="card" id="documents">
+      <h2>DOCUMENTS</h2>
+      <div id="documents-content"></div>
+    </div>
+
+    <!-- DETECTIVE -->
+    <div class="card">
+      <h2>DETECTIVE</h2>
+      <div class="detective-container">
+        <div class="sidebar" id="detective-list"></div>
+        <div class="profile hide" id="profile"></div>
+      </div>
+    </div>
+  </div>
+
+  <audio id="music" loop></audio>
+
+  <script>
+    const intro = document.getElementById("intro");
+    const container = document.getElementById("container");
+    const body = document.body;
+    const music = document.getElementById("music");
+
+    // === Данные документов ===
+    const documents = {
+      "San Diego": {
+        Reports: [
+          { text: "Report #1", url: "https://example.com" },
+          { text: "Report #2", url: "https://example.com" }
+        ],
+        Cases: [
+          { text: "Case #1", url: "https://example.com" },
+          { text: "Case #2", url: "https://example.com" }
+        ]
+      },
+      "Denver": {
+        Reports: [
+          { text: "Denver Report 1", url: "https://example.com" },
+        ],
+        Cases: [
+          { text: "Denver Case 1", url: "https://example.com" },
+        ]
+      }
+    };
+
+    // === Данные детективов ===
+    const detectives = [
+      {
+        name: "Thomson",
+        icon: "assets/icon.png",
+        banner: "assets/banner.gif",
+        music: "assets/music.mp3",
+        status: "H A T E"
+      },
+      {
+        name: "Shadow",
+        icon: "assets/detective2.png",
+        banner: "assets/banner2.gif",
+        music: "assets/music2.mp3",
+        status: "Silent Watcher"
+      }
+    ];
+
+    // === Интро ===
+    intro.addEventListener("click", () => {
+      intro.classList.add("hide");
+      setTimeout(() => {
+        intro.remove();
+        container.classList.add("show");
+      }, 1800);
+    });
+
+    // === Рендер документов ===
+    const docsContainer = document.getElementById("documents-content");
+    Object.keys(documents).forEach(city => {
+      const section = document.createElement("div");
+      section.className = "doc-section";
+
+      const cityBtn = document.createElement("div");
+      cityBtn.className = "city-btn";
+      cityBtn.textContent = city;
+      section.appendChild(cityBtn);
+
+      const submenu = document.createElement("div");
+      submenu.className = "submenu";
+      ["Reports", "Cases"].forEach(type => {
+        const subBtn = document.createElement("div");
+        subBtn.className = "sub-btn";
+        subBtn.textContent = type;
+        submenu.appendChild(subBtn);
+
+        const list = document.createElement("div");
+        list.className = "list";
+        documents[city][type].forEach(item => {
+          const link = document.createElement("a");
+          link.href = item.url;
+          link.className = "link";
+          link.target = "_blank";
+          link.textContent = item.text;
+          list.appendChild(link);
+        });
+        submenu.appendChild(list);
+
+        subBtn.addEventListener("click", () => {
+          list.classList.toggle("active");
+        });
+      });
+
+      cityBtn.addEventListener("click", () => {
+        submenu.classList.toggle("active");
+      });
+
+      section.appendChild(submenu);
+      docsContainer.appendChild(section);
+    });
+
+    // === Рендер детективов ===
+    const detList = document.getElementById("detective-list");
+    const profile = document.getElementById("profile");
+
+    detectives.forEach(det => {
+      const img = document.createElement("img");
+      img.src = det.icon;
+      img.className = "det-avatar";
+      img.addEventListener("click", () => selectDetective(det));
+      detList.appendChild(img);
+    });
+
+    function selectDetective(det) {
+      profile.classList.remove("hide");
+      profile.innerHTML = `
+        <div class="close-profile" onclick="closeProfile()">✕</div>
+        <img src="${det.icon}">
+        <h3>${det.name}</h3>
+        <p>${det.status}</p>
+      `;
+      body.classList.add("active");
+      body.style.background = `url('${det.banner}') center/cover no-repeat`;
+      music.src = det.music;
+      music.play().catch(()=>{});
+    }
+
+    function closeProfile() {
+      profile.classList.add("hide");
+      body.classList.remove("active");
+      body.style.background = "black";
+      music.pause();
+    }
+  </script>
+</body>
+</html>
