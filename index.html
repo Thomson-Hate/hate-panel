@@ -46,7 +46,6 @@
       opacity: 1;
     }
 
-    /* 🔹 Интро */
     .intro {
       position: fixed;
       inset: 0;
@@ -68,7 +67,6 @@
       50% { opacity: 1; }
     }
 
-    /* 🔹 Основная сетка */
     .container {
       display: flex;
       gap: 50px;
@@ -83,7 +81,6 @@
       transform: scale(1);
     }
 
-    /* 🔹 Карточки */
     .card {
       background: rgba(0, 0, 0, 0.5);
       backdrop-filter: blur(8px);
@@ -109,7 +106,6 @@
       text-shadow: 0 0 10px rgba(255,255,255,0.5);
     }
 
-    /* DOCUMENTS */
     .city-btn { background: rgba(255,255,255,0.08); padding: 10px; border-radius: 10px; cursor: pointer; transition: 0.3s; margin-top: 10px; }
     .city-btn:hover { background: rgba(255,255,255,0.2); transform: scale(1.03); }
     .submenu { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; }
@@ -121,7 +117,6 @@
     .link { display: block; background: rgba(255,255,255,0.08); margin: 6px 0; padding: 8px; border-radius: 8px; text-decoration: none; color: white; font-size: 12px; transition: 0.3s; }
     .link:hover { background: rgba(255,255,255,0.2); transform: scale(1.03); }
 
-    /* DETECTIVE */
     .detective-container { display: flex; gap: 15px; }
     .sidebar { width: 70px; display: flex; flex-direction: column; align-items: center; overflow-y: auto; max-height: 300px; }
     .det-avatar { width: 60px; height: 60px; border-radius: 50%; border: 2px solid white; margin-bottom: 10px; cursor: pointer; transition: 0.3s; }
@@ -147,6 +142,22 @@
     .offline { background: #747f8d; }
 
     .profile h3 { margin-top: 10px; font-size: 22px; letter-spacing: 1px; }
+
+    .link-btn {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      justify-content: center;
+      background: rgba(255,255,255,0.08);
+      padding: 8px 12px;
+      border-radius: 10px;
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+    .link-btn img { width: 18px; height: 18px; }
+    .link-btn:hover { background: rgba(255,255,255,0.2); transform: scale(1.05); }
 
     .close-profile {
       position: absolute;
@@ -197,27 +208,6 @@
     const music = document.getElementById("music");
     const profile = document.getElementById("profile");
 
-    const documents = {
-      "San Diego": {
-        Reports: [
-          { text: "Report #1", url: "https://example.com" },
-          { text: "Report #2", url: "https://example.com" }
-        ],
-        Cases: [
-          { text: "Case #1", url: "https://example.com" },
-          { text: "Case #2", url: "https://example.com" }
-        ]
-      },
-      "Denver": {
-        Reports: [
-          { text: "Denver Report 1", url: "https://example.com" },
-        ],
-        Cases: [
-          { text: "Denver Case 1", url: "https://example.com" },
-        ]
-      }
-    };
-
     const detectives = [
       {
         name: "[ CURATOR ] Thomson",
@@ -244,44 +234,12 @@
       }
     ];
 
-
-    // Documents
-    const docsContainer = document.getElementById("documents-content");
-    Object.keys(documents).forEach(city => {
-      const section = document.createElement("div");
-      section.className = "doc-section";
-
-      const cityBtn = document.createElement("div");
-      cityBtn.className = "city-btn";
-      cityBtn.textContent = city;
-      section.appendChild(cityBtn);
-
-      const submenu = document.createElement("div");
-      submenu.className = "submenu";
-      ["Reports", "Cases"].forEach(type => {
-        const subBtn = document.createElement("div");
-        subBtn.className = "sub-btn";
-        subBtn.textContent = type;
-        submenu.appendChild(subBtn);
-
-        const list = document.createElement("div");
-        list.className = "list";
-        documents[city][type].forEach(item => {
-          const link = document.createElement("a");
-          link.href = item.url;
-          link.className = "link";
-          link.target = "_blank";
-          link.textContent = item.text;
-          list.appendChild(link);
-        });
-        submenu.appendChild(list);
-
-        subBtn.addEventListener("click", () => list.classList.toggle("active"));
-      });
-
-      cityBtn.addEventListener("click", () => submenu.classList.toggle("active"));
-      section.appendChild(submenu);
-      docsContainer.appendChild(section);
+    intro.addEventListener("click", () => {
+      intro.classList.add("hide");
+      setTimeout(() => {
+        intro.remove();
+        container.classList.add("show");
+      }, 1800);
     });
 
     // Detectives
@@ -304,60 +262,49 @@
       return "offline";
     }
 
-  async function selectDetective(det) {
-    const discordStatus = await getDiscordStatus(det.discord);
-    const statusText = discordStatus.charAt(0).toUpperCase() + discordStatus.slice(1);
-  
-    profile.classList.remove("hide");
-  
-    // Создаем HTML для ссылок
-    let linksHTML = '';
-    if (det.links && det.links.length) {
-      linksHTML = '<div style="margin-top:15px; display:flex; flex-direction:column; gap:8px;">';
-      det.links.forEach(link => {
-        linksHTML += `
-          <a href="${link.url}" target="_blank" style="
-            display:flex;
-            align-items:center;
-            gap:8px;
-            background: rgba(255,255,255,0.08);
-            padding:6px 10px;
-            border-radius:8px;
-            color:white;
-            text-decoration:none;
-            transition:0.3s;
-          " onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.08)'">
-            <img src="${link.icon}" style="width:18px; height:18px;">
-            <span>${link.text}</span>
-          </a>
-        `;
-      });
-      linksHTML += '</div>';
+    async function selectDetective(det) {
+      const discordStatus = await getDiscordStatus(det.discord);
+      const statusText = discordStatus.charAt(0).toUpperCase() + discordStatus.slice(1);
+
+      let linksHTML = '';
+      if (det.links && det.links.length) {
+        linksHTML = `<div style="margin-top:15px; display:flex; flex-direction:column; gap:8px;">`;
+        det.links.forEach(link => {
+          linksHTML += `
+            <a href="${link.url}" target="_blank" class="link-btn">
+              <img src="${link.icon}">
+              <span>${link.text}</span>
+            </a>
+          `;
+        });
+        linksHTML += `</div>`;
+      }
+
+      profile.classList.remove("hide");
+      profile.innerHTML = `
+        <div class="close-profile" onclick="closeProfile()">✕</div>
+        <img src="${det.icon}">
+        <h3>${det.name}</h3>
+        <p>${det.status} 
+          <span class="status-indicator ${discordStatus}"></span>
+          <span style="font-size:12px;opacity:0.8;">${statusText}</span>
+        </p>
+        ${linksHTML}
+      `;
+
+      body.classList.add("active");
+      body.style.background = `url('${det.banner}') center/cover no-repeat`;
+      music.src = det.music;
+      music.play().catch(()=>{});
+
+      if (window.statusInterval) clearInterval(window.statusInterval);
+      window.statusInterval = setInterval(async () => {
+        const newStatus = await getDiscordStatus(det.discord);
+        const indicator = document.querySelector(".status-indicator");
+        if (indicator) indicator.className = `status-indicator ${newStatus}`;
+      }, 15000);
     }
-  
-    profile.innerHTML = `
-      <div class="close-profile" onclick="closeProfile()">✕</div>
-      <img src="${det.icon}">
-      <h3>${det.name}</h3>
-      <p>${det.status} 
-        <span class="status-indicator ${discordStatus}"></span>
-        <span style="font-size:12px;opacity:0.8;">${statusText}</span>
-      </p>
-      ${linksHTML}
-    `;
-  
-    body.classList.add("active");
-    body.style.background = `url('${det.banner}') center/cover no-repeat`;
-    music.src = det.music;
-    music.play().catch(()=>{});
-  
-    if (window.statusInterval) clearInterval(window.statusInterval);
-    window.statusInterval = setInterval(async () => {
-      const newStatus = await getDiscordStatus(det.discord);
-      const indicator = document.querySelector(".status-indicator");
-      if (indicator) indicator.className = `status-indicator ${newStatus}`;
-    }, 15000);
-  }
+
     function closeProfile() {
       profile.classList.add("hide");
       body.classList.remove("active");
