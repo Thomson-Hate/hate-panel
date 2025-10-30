@@ -225,7 +225,11 @@
         banner: "assets/thomson_banner.gif",
         music: "assets/thomson_music.mp3",
         status: "H A T E",
-        discord: "1223426765045633255"
+        discord: "1223426765045633255",
+        links: [
+          { icon: "assets/browser_icon.png", text: "Profile", url: "https://example.com" },
+          { icon: "assets/browser_icon.png", text: "Case Files", url: "https://example.com" }
+        ]
       },
       {
         name: "[ HEAD ] Chikago",
@@ -233,17 +237,13 @@
         banner: "assets/chikago_banner.gif",
         music: "assets/chikago_music.mp3",
         status: "Chikago",
-        discord: "820327530514743308"
+        discord: "820327530514743308",
+        links: [
+          { icon: "assets/browser_icon.png", text: "Profile", url: "https://example.com" }
+        ]
       }
     ];
 
-    intro.addEventListener("click", () => {
-      intro.classList.add("hide");
-      setTimeout(() => {
-        intro.remove();
-        container.classList.add("show");
-      }, 1800);
-    });
 
     // Documents
     const docsContainer = document.getElementById("documents-content");
@@ -304,34 +304,60 @@
       return "offline";
     }
 
-    async function selectDetective(det) {
-      const discordStatus = await getDiscordStatus(det.discord);
-      const statusText = discordStatus.charAt(0).toUpperCase() + discordStatus.slice(1);
-      profile.classList.remove("hide");
-      profile.innerHTML = `
-        <div class="close-profile" onclick="closeProfile()">✕</div>
-        <img src="${det.icon}">
-        <h3>${det.name}</h3>
-        <p>${det.status} 
-          <span class="status-indicator ${discordStatus}"></span>
-          <span style="font-size:12px;opacity:0.8;">${statusText}</span>
-        </p>
-      `;
-      body.classList.add("active");
-      body.style.background = `url('${det.banner}') center/cover no-repeat`;
-      music.src = det.music;
-      music.play().catch(()=>{});
-
-      if (window.statusInterval) clearInterval(window.statusInterval);
-      window.statusInterval = setInterval(async () => {
-        const newStatus = await getDiscordStatus(det.discord);
-        const indicator = document.querySelector(".status-indicator");
-        if (indicator) {
-          indicator.className = `status-indicator ${newStatus}`;
-        }
-      }, 15000);
+  async function selectDetective(det) {
+    const discordStatus = await getDiscordStatus(det.discord);
+    const statusText = discordStatus.charAt(0).toUpperCase() + discordStatus.slice(1);
+  
+    profile.classList.remove("hide");
+  
+    // Создаем HTML для ссылок
+    let linksHTML = '';
+    if (det.links && det.links.length) {
+      linksHTML = '<div style="margin-top:15px; display:flex; flex-direction:column; gap:8px;">';
+      det.links.forEach(link => {
+        linksHTML += `
+          <a href="${link.url}" target="_blank" style="
+            display:flex;
+            align-items:center;
+            gap:8px;
+            background: rgba(255,255,255,0.08);
+            padding:6px 10px;
+            border-radius:8px;
+            color:white;
+            text-decoration:none;
+            transition:0.3s;
+          " onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.08)'">
+            <img src="${link.icon}" style="width:18px; height:18px;">
+            <span>${link.text}</span>
+          </a>
+        `;
+      });
+      linksHTML += '</div>';
     }
-
+  
+    profile.innerHTML = `
+      <div class="close-profile" onclick="closeProfile()">✕</div>
+      <img src="${det.icon}">
+      <h3>${det.name}</h3>
+      <p>${det.status} 
+        <span class="status-indicator ${discordStatus}"></span>
+        <span style="font-size:12px;opacity:0.8;">${statusText}</span>
+      </p>
+      ${linksHTML}
+    `;
+  
+    body.classList.add("active");
+    body.style.background = `url('${det.banner}') center/cover no-repeat`;
+    music.src = det.music;
+    music.play().catch(()=>{});
+  
+    if (window.statusInterval) clearInterval(window.statusInterval);
+    window.statusInterval = setInterval(async () => {
+      const newStatus = await getDiscordStatus(det.discord);
+      const indicator = document.querySelector(".status-indicator");
+      if (indicator) indicator.className = `status-indicator ${newStatus}`;
+    }, 15000);
+  }
     function closeProfile() {
       profile.classList.add("hide");
       body.classList.remove("active");
